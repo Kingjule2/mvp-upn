@@ -1,0 +1,11 @@
+{
+  "name": "mvp-koprasiupn/monorepo",
+  "description": "Root Composer wrapper for building backend on Vercel",
+  "type": "project",
+  "license": "MIT",
+  "scripts": {
+    "vercel": [
+      "composer --working-dir=backend install --no-dev --no-interaction --no-scripts --ignore-platform-reqs --no-progress --optimize-autoloader"
+    ]
+  }
+}

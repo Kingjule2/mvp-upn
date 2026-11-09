@@ -1,0 +1,10 @@
+{
+  "name": "mvp-koprasiupn",
+  "private": true,
+  "scripts": {
+    "install": "cd frontend && npm install --include=dev",
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "preview": "cd frontend && npm run preview"
+  }
+}

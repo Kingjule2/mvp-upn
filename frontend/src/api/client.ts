@@ -8,7 +8,12 @@ import type {
   User,
 } from '../types';
 
-const API_BASE = '/api';
+const rawApiUrl = import.meta.env.VITE_API_URL?.trim();
+const API_BASE = rawApiUrl
+  ? rawApiUrl.replace(/\/+$/, '').endsWith('/api')
+    ? rawApiUrl.replace(/\/+$/, '')
+    : `${rawApiUrl.replace(/\/+$/, '')}/api`
+  : '/api';
 
 export class ApiError extends Error {
   status: number;
