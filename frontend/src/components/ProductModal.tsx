@@ -129,8 +129,8 @@ export const ProductModal: React.FC<ProductModalProps> = ({
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4 text-xs">
           {/* SKU & Name */}
-          <div className="grid grid-cols-3 gap-3">
-            <div className="col-span-1">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="sm:col-span-1">
               <label className="block font-semibold text-slate-700 mb-1">
                 SKU / Barcode <span className="text-rose-500">*</span>
               </label>
@@ -144,7 +144,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
               />
             </div>
 
-            <div className="col-span-2">
+            <div className="sm:col-span-2">
               <label className="block font-semibold text-slate-700 mb-1">
                 Nama Produk <span className="text-rose-500">*</span>
               </label>

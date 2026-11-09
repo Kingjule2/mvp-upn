@@ -123,10 +123,10 @@ export const BulkImportView: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3.5 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center space-x-2">
-            <span>Impor Massal Produk via Excel (.xlsx) & CSV (.csv)</span>
+          <h1 className="text-base sm:text-xl font-bold text-slate-900 tracking-tight flex items-center space-x-2">
+            <span>Impor Massal Produk via Excel &amp; CSV</span>
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
             Migrasi cepat ratusan data produk baru beserta saldo stok awal dan mutasi awal otomatis
@@ -134,23 +134,23 @@ export const BulkImportView: React.FC = () => {
         </div>
 
         {/* Download Template Buttons */}
-        <div className="flex items-center space-x-2">
+        <div className="grid grid-cols-2 sm:flex items-center gap-2 w-full sm:w-auto">
           <a
             href={api.getTemplateUrl('xlsx')}
             download="template_import_produk_koperasi.xlsx"
-            className="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg border border-slate-200 transition-colors"
+            className="flex items-center justify-center space-x-1.5 px-3 py-2 sm:py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg border border-slate-200 transition-colors"
           >
-            <Download className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Unduh Template .XLSX</span>
+            <Download className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+            <span className="truncate">Template .XLSX</span>
           </a>
 
           <a
             href={api.getTemplateUrl('csv')}
             download="template_import_produk_koperasi.csv"
-            className="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg border border-slate-200 transition-colors"
+            className="flex items-center justify-center space-x-1.5 px-3 py-2 sm:py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg border border-slate-200 transition-colors"
           >
-            <Download className="w-3.5 h-3.5 text-blue-600" />
-            <span>Unduh Template .CSV</span>
+            <Download className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+            <span className="truncate">Template .CSV</span>
           </a>
         </div>
       </div>

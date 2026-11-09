@@ -117,9 +117,9 @@ export const ProductsView: React.FC<ProductsViewProps> = ({ initialStatusFilter 
   return (
     <div className="space-y-5">
       {/* Top Header & Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3.5 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center space-x-2">
+          <h1 className="text-base sm:text-xl font-bold text-slate-900 tracking-tight flex items-center space-x-2">
             <span>Rekapitulasi Master Produk</span>
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
@@ -127,11 +127,11 @@ export const ProductsView: React.FC<ProductsViewProps> = ({ initialStatusFilter 
           </p>
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
           <button
             onClick={() => fetchProducts()}
             title="Muat ulang data"
-            className="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-600 transition-colors cursor-pointer"
+            className="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-600 transition-colors cursor-pointer shrink-0"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </button>
@@ -142,7 +142,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({ initialStatusFilter 
                 setEditingProduct(null);
                 setIsProductModalOpen(true);
               }}
-              className="flex items-center space-x-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors cursor-pointer"
+              className="flex-1 sm:flex-initial flex items-center justify-center space-x-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Tambah Produk Manual</span>
@@ -229,8 +229,8 @@ export const ProductsView: React.FC<ProductsViewProps> = ({ initialStatusFilter 
           />
         </div>
 
-        <div className="flex items-center gap-2">
-          <div className="relative min-w-[160px]">
+        <div className="grid grid-cols-2 sm:flex items-center gap-2 w-full sm:w-auto">
+          <div className="relative min-w-0 sm:min-w-[160px]">
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
@@ -245,7 +245,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({ initialStatusFilter 
             </select>
           </div>
 
-          <div className="relative min-w-[140px]">
+          <div className="relative min-w-0 sm:min-w-[140px]">
             <select
               value={statusFilter}
               onChange={(e) => {
@@ -271,36 +271,34 @@ export const ProductsView: React.FC<ProductsViewProps> = ({ initialStatusFilter 
 
       {/* Products Table */}
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-xs text-left">
-            <thead>
-              <tr className="bg-slate-50/80 border-b border-slate-200 text-slate-500 font-semibold uppercase tracking-wider">
-                <th className="py-3 px-4">SKU / Barcode</th>
-                <th className="py-3 px-4">Nama Produk</th>
-                <th className="py-3 px-4">Kategori</th>
-                <th className="py-3 px-4 text-right">Harga Modal (HPP)</th>
-                <th className="py-3 px-4 text-right">Harga Jual</th>
-                <th className="py-3 px-4 text-right">Sisa Stok</th>
-                <th className="py-3 px-4 text-center">Satuan</th>
-                <th className="py-3 px-4 text-center">Status</th>
-                <th className="py-3 px-4 text-center">Expired</th>
-                <th className="py-3 px-4 text-center">Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {products.length === 0 ? (
-                <tr>
-                  <td colSpan={10} className="py-12 text-center text-slate-400">
-                    <Package className="w-8 h-8 mx-auto mb-2 opacity-40" />
-                    <p className="font-medium">
-                      {search || categoryFilter || statusFilter || expiringSoonFilter
-                        ? 'Tidak ada produk yang cocok dengan pencarian / filter.'
-                        : 'Belum ada data produk. Tambahkan produk baru atau impor dari Excel/CSV.'}
-                    </p>
-                  </td>
+        {products.length === 0 ? (
+          <div className="py-12 px-4 text-center text-slate-400 text-xs">
+            <Package className="w-8 h-8 mx-auto mb-2 opacity-40" />
+            <p className="font-medium text-slate-500">
+              {search || categoryFilter || statusFilter || expiringSoonFilter
+                ? 'Tidak ada produk yang cocok dengan pencarian / filter.'
+                : 'Belum ada data produk. Tambahkan produk baru atau impor dari Excel/CSV.'}
+            </p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-xs text-left">
+              <thead>
+                <tr className="bg-slate-50/80 border-b border-slate-200 text-slate-500 font-semibold uppercase tracking-wider">
+                  <th className="py-3 px-4">SKU / Barcode</th>
+                  <th className="py-3 px-4">Nama Produk</th>
+                  <th className="py-3 px-4">Kategori</th>
+                  <th className="py-3 px-4 text-right">Harga Modal (HPP)</th>
+                  <th className="py-3 px-4 text-right">Harga Jual</th>
+                  <th className="py-3 px-4 text-right">Sisa Stok</th>
+                  <th className="py-3 px-4 text-center">Satuan</th>
+                  <th className="py-3 px-4 text-center">Status</th>
+                  <th className="py-3 px-4 text-center">Expired</th>
+                  <th className="py-3 px-4 text-center">Aksi</th>
                 </tr>
-              ) : (
-                products.map((p) => {
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {products.map((p) => {
                   let statusBadgeClass = 'bg-emerald-50 text-emerald-700 border-emerald-200';
                   if (p.status === 'Habis') {
                     statusBadgeClass = 'bg-rose-50 text-rose-700 border-rose-200';
@@ -404,11 +402,11 @@ export const ProductsView: React.FC<ProductsViewProps> = ({ initialStatusFilter 
                       </td>
                     </tr>
                   );
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       {/* Modals */}

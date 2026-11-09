@@ -61,56 +61,66 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigateToProduc
   return (
     <div className="space-y-6">
       {/* Top Header & Period Filter */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
-        <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center space-x-2">
-            <span>Performa Keuangan & Penjualan</span>
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-              Live Real-Time
-            </span>
-          </h1>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Ringkasan omzet, laba kotor, pergerakan stok, dan peringatan operasional koperasi
-          </p>
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3.5 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+        <div className="flex items-start justify-between gap-2">
+          <div>
+            <h1 className="text-base sm:text-xl font-bold text-slate-900 tracking-tight flex flex-wrap items-center gap-2">
+              <span>Performa Keuangan &amp; Penjualan</span>
+              <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                Live Real-Time
+              </span>
+            </h1>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Ringkasan omzet, laba kotor, pergerakan stok, dan peringatan operasional koperasi
+            </p>
+          </div>
+          <button
+            onClick={() => fetchDashboard()}
+            title="Refresh Data"
+            className="sm:hidden p-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-600 transition-colors cursor-pointer shrink-0"
+          >
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+          </button>
         </div>
 
         {/* Period Selector */}
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="inline-flex rounded-lg bg-slate-100 p-0.5 text-xs font-medium border border-slate-200">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2">
+          <div className="grid grid-cols-4 sm:inline-flex rounded-lg bg-slate-100 p-0.5 text-[11px] sm:text-xs font-medium border border-slate-200">
             {[
-              { id: 'today', label: 'Hari Ini' },
-              { id: '7days', label: '7 Hari Terakhir' },
-              { id: 'month', label: 'Bulan Ini' },
-              { id: 'custom', label: 'Kustom' },
+              { id: 'today', label: 'Hari Ini', shortLabel: 'Hari Ini' },
+              { id: '7days', label: '7 Hari Terakhir', shortLabel: '7 Hari' },
+              { id: 'month', label: 'Bulan Ini', shortLabel: 'Bulan Ini' },
+              { id: 'custom', label: 'Kustom', shortLabel: 'Kustom' },
             ].map((p) => (
               <button
                 key={p.id}
                 onClick={() => setPeriod(p.id)}
-                className={`px-3 py-1.5 rounded-md transition-all cursor-pointer ${
+                className={`px-2 sm:px-3 py-1.5 rounded-md transition-all cursor-pointer text-center truncate ${
                   period === p.id
                     ? 'bg-white text-emerald-700 shadow-xs font-semibold'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                {p.label}
+                <span className="sm:hidden">{p.shortLabel}</span>
+                <span className="hidden sm:inline">{p.label}</span>
               </button>
             ))}
           </div>
 
           {period === 'custom' && (
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center gap-1.5 w-full sm:w-auto">
               <input
                 type="date"
                 value={customStart}
                 onChange={(e) => setCustomStart(e.target.value)}
-                className="text-xs px-2.5 py-1.5 border border-slate-300 rounded-md bg-white text-slate-700"
+                className="flex-1 sm:flex-initial min-w-0 text-xs px-2.5 py-1.5 border border-slate-300 rounded-md bg-white text-slate-700"
               />
-              <span className="text-xs text-slate-400">s/d</span>
+              <span className="text-xs text-slate-400 shrink-0">s/d</span>
               <input
                 type="date"
                 value={customEnd}
                 onChange={(e) => setCustomEnd(e.target.value)}
-                className="text-xs px-2.5 py-1.5 border border-slate-300 rounded-md bg-white text-slate-700"
+                className="flex-1 sm:flex-initial min-w-0 text-xs px-2.5 py-1.5 border border-slate-300 rounded-md bg-white text-slate-700"
               />
             </div>
           )}
@@ -118,7 +128,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigateToProduc
           <button
             onClick={() => fetchDashboard()}
             title="Refresh Data"
-            className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-600 transition-colors cursor-pointer"
+            className="hidden sm:inline-flex p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-600 transition-colors cursor-pointer"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </button>
@@ -242,12 +252,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onNavigateToProduc
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Sales Trend Chart (2 Cols) */}
         <div className="lg:col-span-2 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
             <div>
               <h2 className="text-sm font-bold text-slate-900">Grafik Tren Penjualan Harian</h2>
               <p className="text-xs text-slate-500">Perbandingan Pendapatan (Omzet), Modal (HPP), dan Laba Kotor</p>
             </div>
-            <div className="flex items-center space-x-3 text-xs">
+            <div className="flex flex-wrap items-center gap-3 text-xs">
               <div className="flex items-center space-x-1.5">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
                 <span className="text-slate-600 font-medium">Omzet</span>

@@ -163,11 +163,11 @@ export const PosView: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Top Header */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+      <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center space-x-2">
+          <h1 className="text-base sm:text-xl font-bold text-slate-900 tracking-tight flex flex-wrap items-center gap-2">
             <span>Kasir / Point of Sale (POS)</span>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold">
+            <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold whitespace-nowrap shrink-0">
               Input Transaksi Harian
             </span>
           </h1>
@@ -363,15 +363,15 @@ export const PosView: React.FC = () => {
             {/* Cash Payment input */}
             {paymentMethod === 'cash' && (
               <div className="space-y-1.5 pt-1">
-                <div className="flex items-center justify-between text-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 text-xs">
                   <span className="font-semibold text-slate-600">Uang Diterima:</span>
-                  <div className="flex items-center space-x-1">
+                  <div className="flex flex-wrap items-center gap-1">
                     {[totalAmount, totalAmount + 5000, totalAmount + 10000, 50000, 100000].map((amt, aIdx) => (
                       <button
                         key={aIdx}
                         type="button"
                         onClick={() => setPaymentAmount(String(amt))}
-                        className="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 hover:bg-slate-300 font-mono"
+                        className="text-[10px] px-2 py-0.5 rounded bg-slate-200 text-slate-700 hover:bg-slate-300 font-mono cursor-pointer"
                       >
                         {amt.toLocaleString('id-ID')}
                       </button>

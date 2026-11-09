@@ -46,11 +46,11 @@ export const StockMovementView: React.FC = () => {
   return (
     <div className="space-y-5">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+      <div className="flex items-start sm:items-center justify-between gap-3 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center space-x-2">
-            <span>Riwayat Kartu Stok & Audit Trail</span>
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+          <h1 className="text-base sm:text-xl font-bold text-slate-900 tracking-tight flex flex-wrap items-center gap-2">
+            <span>Riwayat Kartu Stok &amp; Audit Trail</span>
+            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200 whitespace-nowrap shrink-0">
               Immutable Log
             </span>
           </h1>
@@ -62,7 +62,7 @@ export const StockMovementView: React.FC = () => {
         <button
           onClick={() => fetchMovements()}
           title="Muat ulang riwayat"
-          className="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-600 transition-colors cursor-pointer self-start sm:self-auto"
+          className="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-600 transition-colors cursor-pointer shrink-0"
         >
           <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
         </button>
@@ -83,8 +83,8 @@ export const StockMovementView: React.FC = () => {
           />
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="min-w-[150px]">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2">
+          <div className="min-w-0 sm:min-w-[150px]">
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
@@ -98,19 +98,19 @@ export const StockMovementView: React.FC = () => {
             </select>
           </div>
 
-          <div className="flex items-center space-x-1.5">
+          <div className="flex items-center gap-1.5 w-full sm:w-auto">
             <input
               type="date"
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
-              className="text-xs px-2.5 py-1.5 border border-slate-200 rounded-lg bg-white text-slate-700"
+              className="flex-1 sm:flex-initial min-w-0 text-xs px-2.5 py-1.5 border border-slate-200 rounded-lg bg-white text-slate-700"
             />
-            <span className="text-xs text-slate-400">s/d</span>
+            <span className="text-xs text-slate-400 shrink-0">s/d</span>
             <input
               type="date"
               value={dateTo}
               onChange={(e) => setDateTo(e.target.value)}
-              className="text-xs px-2.5 py-1.5 border border-slate-200 rounded-lg bg-white text-slate-700"
+              className="flex-1 sm:flex-initial min-w-0 text-xs px-2.5 py-1.5 border border-slate-200 rounded-lg bg-white text-slate-700"
             />
           </div>
         </div>
@@ -124,29 +124,27 @@ export const StockMovementView: React.FC = () => {
 
       {/* Movements Table */}
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-xs text-left">
-            <thead>
-              <tr className="bg-slate-50/80 border-b border-slate-200 text-slate-500 font-semibold uppercase tracking-wider">
-                <th className="py-3 px-4">Waktu & Tanggal</th>
-                <th className="py-3 px-4">SKU & Nama Produk</th>
-                <th className="py-3 px-4 text-center">Jenis Mutasi</th>
-                <th className="py-3 px-4 text-right">Jumlah (+/-)</th>
-                <th className="py-3 px-4 text-right">Saldo Akhir</th>
-                <th className="py-3 px-4">Petugas / Operator</th>
-                <th className="py-3 px-4">Alasan / Referensi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {movements.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="py-12 text-center text-slate-400">
-                    <History className="w-8 h-8 mx-auto mb-2 opacity-40" />
-                    <p className="font-medium">Belum ada catatan mutasi stok yang sesuai.</p>
-                  </td>
+        {movements.length === 0 ? (
+          <div className="py-12 px-4 text-center text-slate-400 text-xs">
+            <History className="w-8 h-8 mx-auto mb-2 opacity-40" />
+            <p className="font-medium text-slate-500">Belum ada catatan mutasi stok yang sesuai.</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-xs text-left">
+              <thead>
+                <tr className="bg-slate-50/80 border-b border-slate-200 text-slate-500 font-semibold uppercase tracking-wider">
+                  <th className="py-3 px-4">Waktu &amp; Tanggal</th>
+                  <th className="py-3 px-4">SKU &amp; Nama Produk</th>
+                  <th className="py-3 px-4 text-center">Jenis Mutasi</th>
+                  <th className="py-3 px-4 text-right">Jumlah (+/-)</th>
+                  <th className="py-3 px-4 text-right">Saldo Akhir</th>
+                  <th className="py-3 px-4">Petugas / Operator</th>
+                  <th className="py-3 px-4">Alasan / Referensi</th>
                 </tr>
-              ) : (
-                movements.map((m) => {
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {movements.map((m) => {
                   let badge = 'bg-slate-100 text-slate-700 border-slate-200';
                   if (m.type === 'INBOUND' || m.type === 'INBOUND_INITIAL') {
                     badge = 'bg-emerald-50 text-emerald-700 border-emerald-200';
@@ -195,11 +193,11 @@ export const StockMovementView: React.FC = () => {
                       </td>
                     </tr>
                   );
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -37,7 +37,7 @@ const MainLayout: React.FC = () => {
     <div className="min-h-screen bg-slate-50 flex flex-col text-slate-800">
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 pb-24 md:pb-8">
         {activeTab === 'dashboard' && (
           <DashboardView onNavigateToProducts={handleNavigateToProducts} />
         )}
