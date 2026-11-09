@@ -52,7 +52,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
       setSku('');
       setName('');
       setCategoryId(categories.length > 0 ? String(categories[0].id) : '');
-      setIsNewCategory(false);
+      setIsNewCategory(categories.length === 0);
       setCategoryName('');
       setUnit('pcs');
       setPurchasePrice('');

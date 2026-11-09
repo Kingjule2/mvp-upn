@@ -77,7 +77,7 @@ if ($isServerless) {
     if ($dbConnection === 'sqlite') {
         $sqlitePath = getenv('DB_DATABASE') ?: ($_ENV['DB_DATABASE'] ?? '');
         if ($sqlitePath === '' || !is_writable(dirname($sqlitePath))) {
-            $sqlitePath = $tmpRoot . '/database.sqlite';
+            $sqlitePath = $tmpRoot . '/database_empty.sqlite';
             $forceEnv('DB_DATABASE', $sqlitePath);
         }
         if (!file_exists($sqlitePath)) {

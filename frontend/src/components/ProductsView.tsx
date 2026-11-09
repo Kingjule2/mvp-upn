@@ -292,7 +292,11 @@ export const ProductsView: React.FC<ProductsViewProps> = ({ initialStatusFilter 
                 <tr>
                   <td colSpan={10} className="py-12 text-center text-slate-400">
                     <Package className="w-8 h-8 mx-auto mb-2 opacity-40" />
-                    <p className="font-medium">Tidak ada produk yang cocok dengan pencarian / filter.</p>
+                    <p className="font-medium">
+                      {search || categoryFilter || statusFilter || expiringSoonFilter
+                        ? 'Tidak ada produk yang cocok dengan pencarian / filter.'
+                        : 'Belum ada data produk. Tambahkan produk baru atau impor dari Excel/CSV.'}
+                    </p>
                   </td>
                 </tr>
               ) : (
@@ -411,7 +415,10 @@ export const ProductsView: React.FC<ProductsViewProps> = ({ initialStatusFilter 
       <ProductModal
         isOpen={isProductModalOpen}
         onClose={() => setIsProductModalOpen(false)}
-        onSuccess={() => fetchProducts()}
+        onSuccess={() => {
+          fetchProducts();
+          fetchCategories();
+        }}
         product={editingProduct}
         categories={categories}
       />

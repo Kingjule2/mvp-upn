@@ -46,14 +46,6 @@ class ProductImportController extends Controller
         $headers = self::REQUIRED_HEADERS;
         $sheet->fromArray([$headers], null, 'A1');
 
-        // Sample Rows
-        $sampleData = [
-            ['SNK-010', 'Biskuit Cokelat Roma 100g', 'Makanan & Minuman', 'pcs', 6000, 8500, 50, 10, Carbon::today()->addMonths(6)->toDateString()],
-            ['ATK-010', 'Penghapus Karet Joyko', 'Alat Tulis Kantor', 'pcs', 1500, 2500, 100, 20, ''],
-            ['MERCH-010', 'Pin Logo UPN Veteran', 'Merchandise Kampus', 'pcs', 4000, 8000, 30, 5, ''],
-        ];
-        $sheet->fromArray($sampleData, null, 'A2');
-
         // Auto-fit column widths
         foreach (range('A', 'I') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);

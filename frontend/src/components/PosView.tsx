@@ -202,45 +202,57 @@ export const PosView: React.FC = () => {
           </div>
 
           {/* Product cards list */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[600px] overflow-y-auto p-1">
-            {filteredProducts.map((p) => {
-              const isOutOfStock = p.current_stock <= 0;
-              return (
-                <button
-                  key={p.id}
-                  disabled={isOutOfStock}
-                  onClick={() => addToCart(p)}
-                  className={`p-3.5 rounded-xl border text-left flex flex-col justify-between transition-all cursor-pointer ${
-                    isOutOfStock
-                      ? 'bg-slate-50 border-slate-200 opacity-60 cursor-not-allowed'
-                      : 'bg-white hover:border-emerald-500 hover:shadow-md border-slate-200/80'
-                  }`}
-                >
-                  <div>
-                    <div className="font-mono text-[10px] text-slate-400">{p.sku}</div>
-                    <div className="font-bold text-xs text-slate-900 line-clamp-2 mt-0.5">{p.name}</div>
-                  </div>
+          {filteredProducts.length === 0 ? (
+            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-12 text-center text-slate-400 text-xs">
+              <ShoppingCart className="w-8 h-8 mx-auto mb-2 opacity-30" />
+              <p className="font-medium text-slate-500">
+                {search ? 'Tidak ada produk yang cocok dengan pencarian.' : 'Belum ada produk tersedia.'}
+              </p>
+              <p className="text-[11px] text-slate-400 mt-1">
+                Tambahkan produk terlebih dahulu di menu Produk &amp; Stok atau Impor Excel/CSV.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[600px] overflow-y-auto p-1">
+              {filteredProducts.map((p) => {
+                const isOutOfStock = p.current_stock <= 0;
+                return (
+                  <button
+                    key={p.id}
+                    disabled={isOutOfStock}
+                    onClick={() => addToCart(p)}
+                    className={`p-3.5 rounded-xl border text-left flex flex-col justify-between transition-all cursor-pointer ${
+                      isOutOfStock
+                        ? 'bg-slate-50 border-slate-200 opacity-60 cursor-not-allowed'
+                        : 'bg-white hover:border-emerald-500 hover:shadow-md border-slate-200/80'
+                    }`}
+                  >
+                    <div>
+                      <div className="font-mono text-[10px] text-slate-400">{p.sku}</div>
+                      <div className="font-bold text-xs text-slate-900 line-clamp-2 mt-0.5">{p.name}</div>
+                    </div>
 
-                  <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between">
-                    <span className="font-mono font-bold text-xs text-emerald-600">
-                      {formatRupiah(p.selling_price)}
-                    </span>
-                    <span
-                      className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
-                        isOutOfStock
-                          ? 'bg-rose-100 text-rose-700'
-                          : p.current_stock <= p.minimum_stock
-                          ? 'bg-amber-100 text-amber-700'
-                          : 'bg-slate-100 text-slate-700'
-                      }`}
-                    >
-                      {p.current_stock} {p.unit}
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
+                    <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between">
+                      <span className="font-mono font-bold text-xs text-emerald-600">
+                        {formatRupiah(p.selling_price)}
+                      </span>
+                      <span
+                        className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
+                          isOutOfStock
+                            ? 'bg-rose-100 text-rose-700'
+                            : p.current_stock <= p.minimum_stock
+                            ? 'bg-amber-100 text-amber-700'
+                            : 'bg-slate-100 text-slate-700'
+                        }`}
+                      >
+                        {p.current_stock} {p.unit}
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Right Column: Active Cart & Checkout (2 Cols) */}
