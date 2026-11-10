@@ -271,7 +271,7 @@ export const api = {
     });
   },
 
-  getTemplateUrl(format: 'xlsx' | 'csv' = 'xlsx'): string {
+  getTemplateUrl(format: 'xlsx' | 'csv' | 'stock_opname' = 'xlsx'): string {
     return `${API_BASE}/import/template?format=${format}`;
   },
 };

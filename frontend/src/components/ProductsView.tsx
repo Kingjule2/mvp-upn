@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Search,
   Plus,
@@ -8,13 +8,16 @@ import {
   RefreshCw,
   Package,
   Calendar,
+  UploadCloud,
+  ChevronDown,
+  PackagePlus,
+  FileSpreadsheet,
 } from 'lucide-react';
 import { api } from '../api/client';
 import type { Category, Product } from '../types';
-import { ProductModal } from './ProductModal';
+import { ProductModal, type ProductModalMode } from './ProductModal';
 import { StockAdjustModal } from './StockAdjustModal';
 import { useAuth } from '../context/AuthContext';
-
 interface ProductsViewProps {
   initialStatusFilter?: string;
 }
@@ -45,10 +48,12 @@ export const ProductsView: React.FC<ProductsViewProps> = ({ initialStatusFilter 
 
   // Modals state
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [productModalMode, setProductModalMode] = useState<ProductModalMode>('manual');
+  const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
+  const addMenuRef = useRef<HTMLDivElement>(null);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isAdjustModalOpen, setIsAdjustModalOpen] = useState(false);
   const [adjustingProduct, setAdjustingProduct] = useState<Product | null>(null);
-
   const fetchCategories = async () => {
     try {
       const res = await api.getCategories();
@@ -88,6 +93,16 @@ export const ProductsView: React.FC<ProductsViewProps> = ({ initialStatusFilter 
 
   useEffect(() => {
     fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (addMenuRef.current && !addMenuRef.current.contains(e.target as Node)) {
+        setIsAddMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -137,16 +152,59 @@ export const ProductsView: React.FC<ProductsViewProps> = ({ initialStatusFilter 
           </button>
 
           {isAdmin && (
-            <button
-              onClick={() => {
-                setEditingProduct(null);
-                setIsProductModalOpen(true);
-              }}
-              className="flex-1 sm:flex-initial flex items-center justify-center space-x-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors cursor-pointer"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Tambah Produk Manual</span>
-            </button>
+            <div className="relative flex-1 sm:flex-initial" ref={addMenuRef}>
+              <button
+                type="button"
+                onClick={() => setIsAddMenuOpen((prev) => !prev)}
+                className="w-full flex items-center justify-center space-x-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Tambah Produk</span>
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isAddMenuOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {isAddMenuOpen && (
+                <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-30">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsAddMenuOpen(false);
+                      setEditingProduct(null);
+                      setProductModalMode('manual');
+                      setIsProductModalOpen(true);
+                    }}
+                    className="w-full px-3.5 py-2.5 text-left hover:bg-slate-50 flex items-start space-x-2.5 transition-colors cursor-pointer"
+                  >
+                    <div className="p-1.5 rounded-lg bg-emerald-50 text-emerald-600 mt-0.5 shrink-0">
+                      <PackagePlus className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-slate-800">Input Produk Manual</div>
+                      <div className="text-[11px] text-slate-500">Tambah produk satuan via formulir</div>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsAddMenuOpen(false);
+                      setEditingProduct(null);
+                      setProductModalMode('import');
+                      setIsProductModalOpen(true);
+                    }}
+                    className="w-full px-3.5 py-2.5 text-left hover:bg-emerald-50/60 flex items-start space-x-2.5 transition-colors cursor-pointer border-t border-slate-100"
+                  >
+                    <div className="p-1.5 rounded-lg bg-blue-50 text-blue-600 mt-0.5 shrink-0">
+                      <UploadCloud className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-slate-800">Upload CSV / Excel</div>
+                      <div className="text-[11px] text-slate-500">Impor massal &amp; Template Stock Opname 2026</div>
+                    </div>
+                  </button>
+                </div>
+              )}
+            </div>
           )}
         </div>
       </div>
@@ -277,8 +335,36 @@ export const ProductsView: React.FC<ProductsViewProps> = ({ initialStatusFilter 
             <p className="font-medium text-slate-500">
               {search || categoryFilter || statusFilter || expiringSoonFilter
                 ? 'Tidak ada produk yang cocok dengan pencarian / filter.'
-                : 'Belum ada data produk. Tambahkan produk baru atau impor dari Excel/CSV.'}
+                : 'Belum ada data produk. Tambahkan produk baru atau upload CSV / Excel (Stock Opname 2026).'}
             </p>
+            {isAdmin && !search && !categoryFilter && !statusFilter && !expiringSoonFilter && (
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingProduct(null);
+                    setProductModalMode('manual');
+                    setIsProductModalOpen(true);
+                  }}
+                  className="inline-flex items-center space-x-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg transition-colors cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Input Produk Manual</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingProduct(null);
+                    setProductModalMode('import');
+                    setIsProductModalOpen(true);
+                  }}
+                  className="inline-flex items-center space-x-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg border border-slate-200 transition-colors cursor-pointer"
+                >
+                  <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Upload CSV / Excel</span>
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -419,6 +505,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({ initialStatusFilter 
         }}
         product={editingProduct}
         categories={categories}
+        initialMode={productModalMode}
       />
 
       <StockAdjustModal

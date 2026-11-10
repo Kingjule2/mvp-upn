@@ -5,7 +5,6 @@ import { Navbar, type ActiveTab } from './components/Navbar';
 import { DashboardView } from './components/DashboardView';
 import { ProductsView } from './components/ProductsView';
 import { StockMovementView } from './components/StockMovementView';
-import { BulkImportView } from './components/BulkImportView';
 import { PosView } from './components/PosView';
 import { SalesHistoryView } from './components/SalesHistoryView';
 import { Loader2 } from 'lucide-react';
@@ -47,8 +46,6 @@ const MainLayout: React.FC = () => {
         )}
 
         {activeTab === 'movements' && <StockMovementView />}
-
-        {activeTab === 'import' && <BulkImportView />}
 
         {activeTab === 'pos' && <PosView />}
 

@@ -3,7 +3,6 @@ import {
   LayoutDashboard,
   Package,
   History,
-  FileSpreadsheet,
   ShoppingCart,
   Receipt,
   LogOut,
@@ -16,7 +15,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-export type ActiveTab = 'dashboard' | 'products' | 'movements' | 'import' | 'pos' | 'sales';
+export type ActiveTab = 'dashboard' | 'products' | 'movements' | 'pos' | 'sales';
 
 interface NavbarProps {
   activeTab: ActiveTab;
@@ -46,7 +45,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
       id: 'products',
       label: 'Katalog & Master Produk',
       shortLabel: 'Produk',
-      desc: 'Kelola daftar barang, harga & stok minimum',
+      desc: 'Kelola daftar barang, harga, stok & impor CSV/Excel',
       icon: <Package className="w-4 h-4" />,
     },
     {
@@ -62,14 +61,6 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
       shortLabel: 'Mutasi',
       desc: 'Catatan mutasi barang masuk, keluar & opname',
       icon: <History className="w-4 h-4" />,
-    },
-    {
-      id: 'import',
-      label: 'Impor Massal Excel/CSV',
-      shortLabel: 'Impor',
-      desc: 'Upload katalog produk via file Excel/CSV',
-      icon: <FileSpreadsheet className="w-4 h-4" />,
-      adminOnly: true,
     },
     {
       id: 'sales',

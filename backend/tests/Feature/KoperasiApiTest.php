@@ -201,4 +201,51 @@ class KoperasiApiTest extends TestCase
             'quantity' => 30,
         ]);
     }
+
+    public function test_stock_opname_2026_xlsx_import_preview_and_execute(): void
+    {
+        $token = $this->admin->createToken('test')->plainTextToken;
+
+        $xlsxPath = base_path('../STOCK OPNAME 2026 (1).xlsx');
+        $this->assertFileExists($xlsxPath);
+
+        $file = new UploadedFile(
+            $xlsxPath,
+            'STOCK OPNAME 2026 (1).xlsx',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            null,
+            true
+        );
+
+        $prevRes = $this->withHeader('Authorization', "Bearer {$token}")
+            ->post('/api/import/preview', ['file' => $file], ['Accept' => 'application/json']);
+
+        $prevRes->assertStatus(200)
+            ->assertJsonPath('summary.invalid_count', 0)
+            ->assertJsonPath('summary.can_execute', true);
+
+        $validCount = $prevRes->json('summary.valid_count');
+        $this->assertGreaterThan(250, $validCount);
+
+        $previewId = $prevRes->json('preview_id');
+
+        $execRes = $this->withHeader('Authorization', "Bearer {$token}")
+            ->postJson('/api/import/execute', [
+                'preview_id' => $previewId,
+                'mode' => 'all_or_nothing',
+            ]);
+
+        $execRes->assertStatus(200)
+            ->assertJsonPath('imported_count', $validCount);
+
+        $this->assertDatabaseHas('products', [
+            'sku' => 'SO-005',
+            'name' => 'We Pol',
+            'purchase_price' => 15300,
+            'selling_price' => 17000,
+            'current_stock' => 2,
+        ]);
+        $this->assertDatabaseHas('categories', ['name' => 'Sembako']);
+        $this->assertDatabaseHas('categories', ['name' => 'ATK (Alat Tulis Kantor)']);
+    }
 }
