@@ -61,7 +61,25 @@ if ($isServerless) {
     $setDefaultEnv('LOG_CHANNEL', 'stderr');
     $setDefaultEnv('SESSION_DRIVER', 'cookie');
     $setDefaultEnv('CACHE_STORE', 'database');
-    $setDefaultEnv('DB_CONNECTION', 'sqlite');
+    $hasPostgresConfig = !empty(getenv('DB_URL'))
+        || !empty(getenv('DATABASE_URL'))
+        || !empty(getenv('POSTGRES_URL'))
+        || !empty(getenv('DB_HOST'))
+        || !empty(getenv('DB_PASSWORD'))
+        || !empty($_ENV['DB_URL'] ?? '')
+        || !empty($_ENV['DATABASE_URL'] ?? '')
+        || !empty($_ENV['POSTGRES_URL'] ?? '')
+        || !empty($_ENV['DB_HOST'] ?? '')
+        || !empty($_ENV['DB_PASSWORD'] ?? '');
+
+    $setDefaultEnv('DB_CONNECTION', $hasPostgresConfig ? 'pgsql' : 'sqlite');
+    if ($hasPostgresConfig) {
+        $setDefaultEnv('DB_HOST', 'aws-0-ap-southeast-1.pooler.supabase.com');
+        $setDefaultEnv('DB_PORT', '5432');
+        $setDefaultEnv('DB_DATABASE', 'postgres');
+        $setDefaultEnv('DB_USERNAME', 'postgres.orfkgoyhkegkjowknvie');
+        $setDefaultEnv('DB_SSLMODE', 'require');
+    }
 
     $forceEnv('LARAVEL_STORAGE_PATH', $storagePath);
     $forceEnv('VIEW_COMPILED_PATH', $storagePath . '/framework/views');
@@ -102,10 +120,9 @@ if ($isServerless && isset($storagePath)) {
 }
 
 $app->booted(function () use ($isServerless): void {
-    $dbConnection = config('database.default');
-    $autoMigrate = $isServerless || filter_var( env('AUTO_MIGRATE', false), FILTER_VALIDATE_BOOLEAN);
+    $autoMigrate = $isServerless || filter_var(env('AUTO_MIGRATE', false), FILTER_VALIDATE_BOOLEAN);
 
-    if ($autoMigrate && $dbConnection === 'sqlite') {
+    if ($autoMigrate) {
         try {
             if (!Schema::hasTable('users')) {
                 Artisan::call('migrate', [
